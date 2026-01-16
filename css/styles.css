@@ -73,3 +73,51 @@ footer {
 .group:hover img {
     transform: scale(1.1);
 }
+
+/* ==================== FIX CENTERING HERO MOBILE ==================== */
+/* ==================== FIX VERTICAL CENTERING MOBILE ==================== */
+@media (max-width: 768px) {
+    /* Hero section mobile */
+    .hero-mobile-center {
+        min-height: 100vh !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    .hero-slideshow-mobile {
+        height: 60vh !important;
+        min-height: 400px !important;
+        max-height: 500px !important;
+    }
+    
+    .hero-mobile-center > div {
+        width: 100% !important;
+    }
+}
+    
+    /* Heading */
+    .hero-text-mobile h1 {
+        text-align: center !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        width: 100% !important;
+    }
+    
+    /* Subtitle */
+    .hero-text-mobile p {
+        text-align: center !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        width: 100% !important;
+    }
+    
+    /* Button */
+    .hero-text-mobile button {
+        margin-left: auto !important;
+        margin-right: auto !important;
+        display: block !important;
+    }
+}

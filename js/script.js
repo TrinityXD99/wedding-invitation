@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
         speed: 1500,          // Durasi transisi 1.5 detik → terasa romantis & tidak terburu-buru
 
         autoplay: {
-            delay: 5000,                // Ganti foto setiap 5 detik
+            delay: 3000,                // Ganti foto setiap 5 detik
             disableOnInteraction: false, // Tetap autoplay meskipun user swipe
             pauseOnMouseEnter: true      // Pause sementara saat hover (bagus di desktop)
         },
