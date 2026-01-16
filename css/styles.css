@@ -1,0 +1,48 @@
+/* ==================== BASE ==================== */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+
+/* font */
+
+/* Definisi variabel warna agar mudah diubah nantinya */
+:root {
+  --dark-green: #0b1c1c; /* Warna hijau gelap untuk Hero & Footer */
+  --bronze-text: #8c765a; /* Warna cokelat elegan untuk judul di area putih */
+}
+
+/* Pengaturan font untuk judul besar (About the Bride/Groom) */
+.font-luxury { 
+  font-family: 'Cormorant Garamond', serif; 
+  color: var(--bronze-text); 
+}
+
+/* Pengaturan font untuk teks deskripsi */
+.font-body { 
+  font-family: 'Montserrat', sans-serif; 
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #FDFBF7;
+    color: #1f2937;
+}
+
+h1, h2, h3, .font-serif {
+    font-family: 'Playfair Display', serif;
+}
+
+
+/* ==================== UTILITIES ==================== */
+footer {
+    margin-bottom: -1px; /* fix sub-pixel gap */
+}
+
+/* Tambahkan style custom lain di sini kalau perlu */
+/* Contoh: hover effect tambahan, animasi kecil, dll */
+.group:hover img {
+    transform: scale(1.1);
+}
