@@ -86,3 +86,52 @@ if (form) {
         });
     });
 }
+
+// ==============================================
+// HERO SLIDESHOW (Swiper.js) - Tambahan untuk background berubah-ubah
+// ==============================================
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Pastikan Swiper sudah ter-load dari CDN
+    if (typeof Swiper === 'undefined') {
+        console.error('Swiper.js belum ter-load. Pastikan CDN-nya sudah ditambahkan di HTML!');
+        return;
+    }
+
+    const heroSwiper = new Swiper('.hero-swiper', {
+        // Efek paling cocok untuk wedding: fade lembut & elegan
+        effect: 'fade',
+        fadeEffect: {
+            crossFade: true   // Membuat transisi mulus tanpa flicker
+        },
+
+        loop: true,           // Slide akan berputar terus (setelah slide terakhir kembali ke awal)
+        speed: 1500,          // Durasi transisi 1.5 detik → terasa romantis & tidak terburu-buru
+
+        autoplay: {
+            delay: 5000,                // Ganti foto setiap 5 detik
+            disableOnInteraction: false, // Tetap autoplay meskipun user swipe
+            pauseOnMouseEnter: true      // Pause sementara saat hover (bagus di desktop)
+        },
+
+        // Tampilkan 1 slide sekaligus (wajib untuk fade)
+        slidesPerView: 1,
+        spaceBetween: 0,
+
+        // Pagination (titik-titik kecil di bawah gambar) → optional tapi cantik
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            type: 'bullets',
+        },
+
+        // Panah kiri-kanan → optional, bisa di-uncomment kalau mau
+        // navigation: {
+        //     nextEl: '.swiper-button-next',
+        //     prevEl: '.swiper-button-prev',
+        // },
+    });
+
+    console.log('Hero Swiper berhasil diinisialisasi!');
+});
+

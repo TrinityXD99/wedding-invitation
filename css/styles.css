@@ -35,6 +35,33 @@ h1, h2, h3, .font-serif {
     font-family: 'Playfair Display', serif;
 }
 
+/* Custom Swiper untuk wedding feel */
+.hero-swiper .swiper-pagination-bullet {
+    background: rgba(255, 255, 255, 0.7);
+    opacity: 0.6;
+    width: 10px;
+    height: 10px;
+}
+
+.hero-swiper .swiper-pagination-bullet-active {
+    background: white;
+    opacity: 1;
+}
+
+/* Arrows (jika dipakai) */
+.swiper-button-prev, .swiper-button-next {
+    color: rgba(255, 255, 255, 0.8) !important;
+    background: rgba(0, 0, 0, 0.3);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.swiper-button-prev:hover, .swiper-button-next:hover {
+    background: rgba(0, 0, 0, 0.6);
+}
+
 
 /* ==================== UTILITIES ==================== */
 footer {
