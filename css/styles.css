@@ -120,33 +120,11 @@ footer {
         margin-right: auto !important;
         display: block !important;
     }
-/* ==================== MUSIC BUTTON ANIMATION ==================== */
-@keyframes pulse-music {
-    0%, 100% {
-        transform: scale(1);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    50% {
-        transform: scale(1.05);
-        box-shadow: 0 6px 12px rgba(15, 36, 36, 0.3);
-    }
+    
+#coverPage {
+    cursor: default; /* Area cover biasa tidak terlihat seperti tombol */
 }
 
-#musicToggle {
-    animation: pulse-music 2s infinite;
-}
-
-#musicToggle:hover {
-    animation: none;
-    transform: scale(1.1);
-}
-
-/* Hide button on very small screens if needed */
-@media (max-width: 360px) {
-    #musicToggle {
-        width: 50px;
-        height: 50px;
-        bottom: 20px;
-        right: 20px;
-    }
+#openInvitationBtn {
+    cursor: pointer; /* Hanya tombol yang terlihat bisa diklik */
 }

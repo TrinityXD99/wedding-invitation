@@ -140,117 +140,113 @@ document.addEventListener('DOMContentLoaded', function () {
 // ==============================================
 
 document.addEventListener('DOMContentLoaded', function() {
+    // === ELEMEN COVER & MUSIK ===
+    const coverPage = document.getElementById('coverPage');
+    const openInvitationBtn = document.getElementById('openInvitationBtn');
     const audio = document.getElementById('backgroundMusic');
-    const toggleBtn = document.getElementById('musicToggle');
+    const musicToggle = document.getElementById('musicToggle');
     const playIcon = document.getElementById('musicPlayIcon');
     const muteIcon = document.getElementById('musicMuteIcon');
-    const tooltip = document.getElementById('musicTooltip');
-    
-    let isMuted = false;
-    let hasStarted = false; // Track apakah musik sudah pernah dimulai
+    const guestName = document.getElementById('guestName');
 
-    // Set volume awal
-    audio.volume = 0.15; // 15% volume
+    // === ELEMEN MODAL PESAN ===
+    const openMessageBtn = document.getElementById('openMessageBtn');
+    const closeModal = document.getElementById('closeModal');
+    const messageModal = document.getElementById('messageModal');
+    const messageForm = document.getElementById('messageForm');
 
-    // Function untuk memulai musik
-    function startMusic() {
-        if (!hasStarted) {
-            audio.play().then(() => {
-                console.log('🎵 Musik berhasil dimulai!');
-                hasStarted = true;
-                isMuted = false;
-                updateIcon();
-            }).catch(error => {
-                console.log('⚠️ Gagal play musik:', error);
-            });
-        }
+    // 1. INISIALISASI AWAL
+    document.body.style.overflow = 'hidden'; // Kunci scroll saat cover ada
+    if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.volume = 0.4;
     }
 
-    // Update icon berdasarkan status
-    function updateIcon() {
-        if (isMuted || audio.paused) {
-            // Tampilkan icon mute
+    // 2. AMBIL NAMA TAMU DARI URL (?to=Nama+Tamu)
+    const urlParams = new URLSearchParams(window.location.search);
+    const nameParam = urlParams.get('to');
+    if (nameParam && guestName) {
+        guestName.textContent = nameParam;
+    }
+
+    // 3. FUNGSI UPDATE IKON MUSIK
+    function updateMusicIcons() {
+        if (audio.paused) {
             playIcon.classList.add('hidden');
             muteIcon.classList.remove('hidden');
-            tooltip.textContent = 'Nyalakan Musik';
         } else {
-            // Tampilkan icon play
             playIcon.classList.remove('hidden');
             muteIcon.classList.add('hidden');
-            tooltip.textContent = 'Matikan Musik';
         }
     }
 
-    // Toggle mute/unmute saat tombol diklik
-    toggleBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        // Jika musik belum pernah dimulai, mulai dulu
-        if (!hasStarted) {
-            startMusic();
-            return;
-        }
-        
-        // Toggle mute/unmute
-        if (isMuted) {
-            // Unmute
-            audio.muted = false;
+    // 4. LOGIKA BUKA UNDANGAN (Cover Bergeser & Musik Play)
+    if (openInvitationBtn) {
+        openInvitationBtn.addEventListener('click', function() {
+            // Animasi Cover Keluar
+            if (coverPage) {
+                coverPage.style.transition = 'transform 1s ease-in-out';
+                coverPage.style.transform = 'translateY(-100%)';
+                document.body.style.overflow = 'auto'; // Buka kunci scroll
+                
+                setTimeout(() => {
+                    coverPage.style.display = 'none';
+                }, 1000);
+            }
+
+            // Putar Musik
+            if (audio) {
+                audio.play().then(() => updateMusicIcons()).catch(err => console.log(err));
+            }
+        });
+    }
+
+    // 5. LOGIKA TOMBOL MUTE/PLAY (Floating Button)
+    if (musicToggle) {
+        musicToggle.addEventListener('click', function() {
             if (audio.paused) {
                 audio.play();
+            } else {
+                audio.pause();
             }
-            isMuted = false;
-            console.log('🔊 Musik dinyalakan');
-        } else {
-            // Mute
-            audio.muted = true;
-            isMuted = true;
-            console.log('🔇 Musik di-mute');
-        }
-        
-        updateIcon();
-    });
-
-    // Coba autoplay langsung
-    setTimeout(() => {
-        startMusic();
-    }, 500);
-
-    // Fallback: Coba play saat ada interaksi user
-    let interactionEvents = ['click', 'touchstart', 'scroll', 'keydown', 'mousemove'];
-    
-    function attemptPlayOnInteraction() {
-        if (!hasStarted) {
-            console.log('🎵 Mencoba play musik dari interaksi user...');
-            startMusic();
-        }
-        
-        // Hapus semua event listener setelah berhasil
-        if (hasStarted) {
-            interactionEvents.forEach(event => {
-                document.removeEventListener(event, attemptPlayOnInteraction);
-            });
-        }
+            updateMusicIcons();
+        });
     }
 
-    // Tambahkan event listener untuk berbagai jenis interaksi
-    interactionEvents.forEach(event => {
-        document.addEventListener(event, attemptPlayOnInteraction, { once: true, passive: true });
-    });
+    // 6. LOGIKA MODAL PESAN
+    if (openMessageBtn) {
+        openMessageBtn.addEventListener('click', () => messageModal.classList.remove('hidden'));
+    }
+    if (closeModal) {
+        closeModal.addEventListener('click', () => messageModal.classList.add('hidden'));
+    }
 
-    // Set initial icon state
-    updateIcon();
+    // 7. SUBMIT FORM KE GOOGLE SHEETS
+    if (messageForm) {
+        messageForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            
+            fetch(scriptURL, { method: 'POST', body: new FormData(messageForm)})
+            .then(res => {
+                alert('Pesan terkirim!');
+                messageForm.reset();
+                messageModal.classList.add('hidden');
+                submitBtn.disabled = false;
+            })
+            .catch(err => console.error(err));
+        });
+    }
 
-    // Monitor status audio untuk update icon
-    audio.addEventListener('play', function() {
-        hasStarted = true;
-        if (!isMuted) {
-            updateIcon();
-        }
-    });
-
-    audio.addEventListener('pause', function() {
-        updateIcon();
-    });
+    // 8. INISIALISASI SWIPER
+    if (typeof Swiper !== 'undefined') {
+        new Swiper('.hero-swiper', {
+            effect: 'fade',
+            loop: true,
+            autoplay: { delay: 3000 },
+            speed: 1500
+        });
+    }
 });
-
