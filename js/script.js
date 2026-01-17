@@ -135,3 +135,122 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('Hero Swiper berhasil diinisialisasi!');
 });
 
+// ==============================================
+// BACKGROUND MUSIC AUTOPLAY + MUTE/UNMUTE CONTROL
+// ==============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    const audio = document.getElementById('backgroundMusic');
+    const toggleBtn = document.getElementById('musicToggle');
+    const playIcon = document.getElementById('musicPlayIcon');
+    const muteIcon = document.getElementById('musicMuteIcon');
+    const tooltip = document.getElementById('musicTooltip');
+    
+    let isMuted = false;
+    let hasStarted = false; // Track apakah musik sudah pernah dimulai
+
+    // Set volume awal
+    audio.volume = 0.15; // 15% volume
+
+    // Function untuk memulai musik
+    function startMusic() {
+        if (!hasStarted) {
+            audio.play().then(() => {
+                console.log('🎵 Musik berhasil dimulai!');
+                hasStarted = true;
+                isMuted = false;
+                updateIcon();
+            }).catch(error => {
+                console.log('⚠️ Gagal play musik:', error);
+            });
+        }
+    }
+
+    // Update icon berdasarkan status
+    function updateIcon() {
+        if (isMuted || audio.paused) {
+            // Tampilkan icon mute
+            playIcon.classList.add('hidden');
+            muteIcon.classList.remove('hidden');
+            tooltip.textContent = 'Nyalakan Musik';
+        } else {
+            // Tampilkan icon play
+            playIcon.classList.remove('hidden');
+            muteIcon.classList.add('hidden');
+            tooltip.textContent = 'Matikan Musik';
+        }
+    }
+
+    // Toggle mute/unmute saat tombol diklik
+    toggleBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Jika musik belum pernah dimulai, mulai dulu
+        if (!hasStarted) {
+            startMusic();
+            return;
+        }
+        
+        // Toggle mute/unmute
+        if (isMuted) {
+            // Unmute
+            audio.muted = false;
+            if (audio.paused) {
+                audio.play();
+            }
+            isMuted = false;
+            console.log('🔊 Musik dinyalakan');
+        } else {
+            // Mute
+            audio.muted = true;
+            isMuted = true;
+            console.log('🔇 Musik di-mute');
+        }
+        
+        updateIcon();
+    });
+
+    // Coba autoplay langsung
+    setTimeout(() => {
+        startMusic();
+    }, 500);
+
+    // Fallback: Coba play saat ada interaksi user
+    let interactionEvents = ['click', 'touchstart', 'scroll', 'keydown', 'mousemove'];
+    
+    function attemptPlayOnInteraction() {
+        if (!hasStarted) {
+            console.log('🎵 Mencoba play musik dari interaksi user...');
+            startMusic();
+        }
+        
+        // Hapus semua event listener setelah berhasil
+        if (hasStarted) {
+            interactionEvents.forEach(event => {
+                document.removeEventListener(event, attemptPlayOnInteraction);
+            });
+        }
+    }
+
+    // Tambahkan event listener untuk berbagai jenis interaksi
+    interactionEvents.forEach(event => {
+        document.addEventListener(event, attemptPlayOnInteraction, { once: true, passive: true });
+    });
+
+    // Set initial icon state
+    updateIcon();
+
+    // Monitor status audio untuk update icon
+    audio.addEventListener('play', function() {
+        hasStarted = true;
+        if (!isMuted) {
+            updateIcon();
+        }
+    });
+
+    audio.addEventListener('pause', function() {
+        updateIcon();
+    });
+});
+
